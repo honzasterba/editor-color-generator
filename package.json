@@ -1,0 +1,35 @@
+{
+  "name": "csd",
+  "version": "0.1.0",
+  "description": "CSD",
+  "private": false,
+  "contributors": [
+    {
+      "name": "Honza Štěrba",
+      "email": "honza.sterba@gmail.com",
+      "url": "http://honzasterba.cz/"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/honzasterba/csd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/honzasterba/csd/issues"
+  },
+  "homepage": "https://honzasterba.cz",
+  "dependencies": {
+    "onecolor": "~2.5.0"
+  },
+  "scripts": {
+    "start": "bin/csd"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.8.0",
+    "gulp": "^3.8.10",
+    "gulp-coffee": "^2.2.0",
+    "gulp-coffeelint": "^0.4.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-util": "^3.0.1"
+  }
+}
