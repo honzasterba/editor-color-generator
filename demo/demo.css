@@ -1,0 +1,19 @@
+.column {
+    float: left;
+}
+
+.graph {
+    width: 420px;
+}
+
+.form {
+    width: 500px;
+}
+
+.box {
+    padding: 1em;
+}
+
+canvas { 
+    border: 1px solid black; 
+}

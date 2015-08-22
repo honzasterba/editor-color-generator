@@ -1,4 +1,8 @@
-color = require "onecolor"
+if (window)
+  color = one.color
+else
+  color = require "onecolor"
+
 
 # input -> primary color (H+S) L=0.5
 # secondary(S) -> S+(primary.H + 0.5 % 1)
@@ -14,19 +18,42 @@ color = require "onecolor"
 # primary -> stringy constatny
 # secondary commenty
 
-xyToAngle = (x, y) ->
-  if Math.abs(x) < 1e-10
-    if y > 0
-      Math.PI/2
-    else
-      3*Math.PI/2
-  else if Math.abs(y) < 1e-10
-    if x > 0
-      0
-    else
-      Math.PI
-  else 
-    Math.atan y/x
+colorToPointC = (hex) ->
+  c = color(hex)
+  colorToPoint c.hue(), c.saturation()
+
+
+colorToPoint = (hue, sat) ->
+  delta = hue * 2 * Math.PI
+  if hue >= 0 && hue < 0.25
+    tan = Math.tan(delta)
+    x = Math.sqrt(sat*sat / (1 + tan*tan))
+    {
+      x: x
+      y: x * tan
+    }
+  else if hue >= 0.25 && hue < 0.5
+    tan = Math.tan(Math.PI - delta)
+    x = Math.sqrt(sat*sat / (1 + tan*tan))
+    {
+      x: - x
+      y: x * tan
+    }
+  else if hue >= 0.5 && hue < 0.75
+    tan = Math.tan(delta - Math.PI)
+    x = Math.sqrt(sat*sat / (1 + tan*tan))
+    {
+      x: - x
+      y: - x * tan
+    }
+  else
+    tan = Math.tan((2 * Math.PI) - delta)
+    x = Math.sqrt(sat*sat / (1 + tan*tan))
+    {
+      x: x
+      y: - x * tan
+    }
+
 
 # all args are in 0..1 range
 generator = (primaryHue, primarySat, secondarySat, height) ->
@@ -34,24 +61,27 @@ generator = (primaryHue, primarySat, secondarySat, height) ->
   secondary = primary.saturation(secondarySat).hue(primaryHue + 0.5 % 1)
  
   baseBase = secondary.saturation(secondary.saturation() * 0.3)
-  
-  width = (primarySat + secondarySat) / 2
-  alpha = primaryHue * 2 * Math.PI
-  u1 = Math.cos alpha
-  u2 = Math.sin alpha
-  v1 = - Math.sin alpha
-  v2 = Math.cos alpha
-  xShift = width - secondarySat
-  
+
+  prim = colorToPointC primary.hex()
+  sec = colorToPointC secondary.hex()
+  centerX = (prim.x + sec.x) / 2
+  centerY = (prim.y + sec.y) / 2
+  xDiff = prim.x - sec.x
+  yDiff = prim.y - sec.y
+  radiusX = Math.sqrt(xDiff*xDiff + yDiff*yDiff) / 2
+  radiusY = height
+  rotationAngle = primaryHue * 2 * Math.PI
+
   base = (lightness) ->
     baseBase.lightness(lightness).hex()
     
   accent = (step) ->
     angle = Math.PI * 2 * step
-    x = xShift + width * u1 * Math.cos(angle) + height * v1 * Math.sin(angle)
-    y =          width * u2 * Math.cos(angle) + height * v2 * Math.sin(angle)
+    x = centerX + radiusX * Math.cos(angle) * Math.cos(rotationAngle) - radiusY * Math.sin(angle) * Math.sin(rotationAngle)
+    y = centerY + radiusX * Math.cos(angle) * Math.sin(rotationAngle) + radiusY * Math.sin(angle) * Math.cos(rotationAngle)
+    
     sat = Math.sqrt(x*x + y*y)
-    xyAngle = xyToAngle(x,y)
+    xyAngle = Math.atan2(y, x)
     hue = xyAngle / (2 * Math.PI)
     color("black").hsl().lightness(0.5).saturation(sat).hue(hue).hex()
     
@@ -64,16 +94,9 @@ generator = (primaryHue, primarySat, secondarySat, height) ->
   {
     primary: primary.hex()
     secondary: secondary.hex()
+    height: height
     base: base
     accent: accent
     accents: accents
   }
 
-module.exports = generator
-
-g = generator(0, 0.7, 0.2, 0.5)
-console.log g.primary
-console.log g.secondary
-for c in g.accents 5
-  console.log c
-#console.log g.base(0), g.base(0.3), g.base(0.6), g.base(1) 

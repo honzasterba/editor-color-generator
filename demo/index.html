@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>Editor Theme Generator</title>
+        <link rel="stylesheet" href="demo.css">
+    </head>
+    <body>
+        <div class="column graph">
+            <canvas id="plot" width="400" height="400"></canvas>
+        </div>
+        <div class="column form">
+            <p>
+                Primary hue: <span id="primaryHueVal">0</span>
+                <input type="range" id="primaryHue" name="primaryHue" value="0" min="0" max="100"/>
+            </p>
+            <p>
+                Primary sat: <span id="primarySatVal">0</span>
+                <input type="range" id="primarySat" name="primarySat" value="0" min="0" max="100"/>
+            </p>
+            <p>
+                Secondary sat: <span id="secondarySatVal">0</span>
+                <input type="range" id="secondarySat" name="secondarySat" value="0" min="0" max="100"/>
+            </p>
+            <p>
+                Ellipse height: <span id="ellipseHeightVal">0</span>
+                <input type="range" id="ellipseHeight" name="ellipseHeight" value="0" min="0" max="100"/>
+            </p>
+
+            <div class="box" id="primary">primary</div>
+            <div class="box" id="secondary">secondary</div>
+            <div class="box" id="base2">base(0.2)</div>
+            <div class="box" id="base5">base(0.5)</div>
+            <div class="box" id="base7">base(0.7)</div>
+            <div class="box" id="accent1">accent1</div>
+            <div class="box" id="accent2">accent2</div>
+            <div class="box" id="accent3">accent3</div>
+            <div class="box" id="accent4">accent4</div>
+            <div class="box" id="accent5">accent5</div>
+            <div class="box" id="accent6">accent6</div>
+        </div>
+
+        <script language="javascript" src="one-color-all-debug.js"></script>
+        <script language="javascript" src="csd.js"></script>
+        <script language="javascript" src="demo.js"></script>
+    </body>
+</html>
