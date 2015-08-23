@@ -3,23 +3,30 @@ if (window)
 else
   color = require "onecolor"
 
+pointToColor = (x, y) ->
+  if x >= 0 && y >= 0
+    tan = y/x
+    delta = Math.atan tan
+  else if x <= 0 && y >= 0
+    tan = -y/x
+    alpha = Math.atan tan
+    delta = Math.PI - alpha
+  else if x <= 0 && y <= 0
+    tan = y/x
+    alpha = Math.atan tan
+    delta = Math.PI + alpha
+  else
+    tan = -y/x
+    alpha = Math.atan tan
+    delta = Math.PI * 2 - alpha
+  {
+    hue: delta / (2 * Math.PI)
+    sat: Math.sqrt(x*x*(1 + tan*tan))
+  }
 
-# input -> primary color (H+S) L=0.5
-# secondary(S) -> S+(primary.H + 0.5 % 1)
-# base(lightness) -> bg, foreground, selection
-# base ma uhel jako secondary, snizis saturaci a hibes lighntes
-
-# jedno ohnisko ve stredu kolecka
-# druhe ohnisko urcene primary a vyskou B
-# B - vyska elipsy
-# accents(B, n) = []
-
-# vsechen text base(1)
-# primary -> stringy constatny
-# secondary commenty
 
 colorToPointC = (hex) ->
-  c = color(hex)
+  c = color(hex).hsl()
   colorToPoint c.hue(), c.saturation()
 
 
@@ -79,11 +86,8 @@ generator = (primaryHue, primarySat, secondarySat, height) ->
     angle = Math.PI * 2 * step
     x = centerX + radiusX * Math.cos(angle) * Math.cos(rotationAngle) - radiusY * Math.sin(angle) * Math.sin(rotationAngle)
     y = centerY + radiusX * Math.cos(angle) * Math.sin(rotationAngle) + radiusY * Math.sin(angle) * Math.cos(rotationAngle)
-    
-    sat = Math.sqrt(x*x + y*y)
-    xyAngle = Math.atan2(y, x)
-    hue = xyAngle / (2 * Math.PI)
-    color("black").hsl().lightness(0.5).saturation(sat).hue(hue).hex()
+    hueSat = pointToColor x, y
+    color("black").hsl().lightness(0.5).hue(hueSat.hue).saturation(hueSat.sat).hex()
     
   accents = (n) ->
     step = 1.0 / n

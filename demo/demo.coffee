@@ -20,27 +20,34 @@ draw = ->
   ctx.strokeStyle = "black"
   ctx.fillStyle = "rgb(50,50,50)"
   ctx.fillRect 0, 0, 400, 400
-  for hue in [0..360]
-    for sat in [0..200]
-      drawCirclePoint ctx, hue / 360.0, sat / 200.0
+  drawColorWheel ctx
   drawPivot ctx
   drawEllipse ctx, g
   drawColorCircle ctx, g.primary
   drawColorCircle ctx, g.secondary
+  $('.code .primary').css({color: g.primary})
+  $('.code .secondary').css({color: g.secondary})
+  $('.code .background').css({backgroundColor: g.base(0)})
+  $('.code .foreground').css({color: g.base(1)})
+  $('.code .selection').css({backgroundColor: g.base(0.5)})
+
   ctx.strokeStyle = "gray"
+  i = 1
   for c in g.accents 6
     drawColorCircle ctx, c
+    $('.code .accent' + i++).css({color: c})
+  drawColorCircle ctx, g.base(0.5)
   null
   
 drawEllipse = (ctx, g) ->
-  prim = shiftPoint(colorToPointC g.primary)
-  sec = shiftPoint(colorToPointC g.secondary)
+  prim = colorToPointC g.primary
+  sec = colorToPointC g.secondary
   cx = (prim.x + sec.x) / 2
   cy = (prim.y + sec.y) / 2
   xDiff = prim.x - sec.x
   yDiff = prim.y - sec.y
   rx = Math.sqrt(xDiff*xDiff + yDiff*yDiff) / 2
-  ry = 200 * g.height
+  ry = g.height
   angle = color(g.primary).hsl().hue() * 2 * Math.PI
   doDrawEllipse ctx, cx, cy, rx, ry, angle
   ctx.stroke()
@@ -50,11 +57,11 @@ doDrawEllipse = (ctx, centerX, centerY, radiusX, radiusY, rotationAngle) ->
   for angle in [0..(2 * Math.PI)] by 0.05
     x = centerX + radiusX * Math.cos(angle) * Math.cos(rotationAngle) - radiusY * Math.sin(angle) * Math.sin(rotationAngle)
     y = centerY + radiusX * Math.cos(angle) * Math.sin(rotationAngle) + radiusY * Math.sin(angle) * Math.cos(rotationAngle)
+    point = shiftPoint {x: x, y: y}
     if (angle == 0)
-      ctx.moveTo x, y
+      ctx.moveTo point.x, point.y
     else
-      ctx.lineTo x, y
-
+      ctx.lineTo point.x, point.y
 
 drawColorCircle = (ctx, circleColor) ->
   center = shiftPoint(colorToPointC circleColor)
@@ -65,10 +72,16 @@ drawColorCircle = (ctx, circleColor) ->
   ctx.fill()
   ctx.stroke()
 
-drawCirclePoint = (ctx, hue, sat) ->
+drawColorWheel = (ctx) ->
+  for hue in [0..100]
+    for sat in [0..50]
+      drawColorWheelPoint ctx, hue / 100.0, sat / 50.0
+
+drawColorWheelPoint = (ctx, hue, sat) ->
   point = shiftPoint(colorToPoint hue, sat)
   ctx.fillStyle = color("black").hsl().lightness(0.5).hue(hue).saturation(sat).hex()
-  ctx.fillRect point.x, point.y, 3, 3
+  rad = 14
+  ctx.fillRect point.x-(rad/2), point.y-(rad/2), rad, rad
 
 drawPivot = (ctx) ->
   point = shiftPoint(colorToPoint 0, 0)
@@ -102,10 +115,10 @@ makeSliderListener = (name) ->
     updateGenerator()
 
 onLoad = ->
-  document.querySelector("#primaryHue").onchange = makeSliderListener("primaryHue")
-  document.querySelector("#primarySat").onchange = makeSliderListener("primarySat")
-  document.querySelector("#secondarySat").onchange = makeSliderListener("secondarySat")
-  document.querySelector("#ellipseHeight").onchange = makeSliderListener("ellipseHeight")
+  document.querySelector("#primaryHue").oninput = makeSliderListener("primaryHue")
+  document.querySelector("#primarySat").oninput = makeSliderListener("primarySat")
+  document.querySelector("#secondarySat").oninput = makeSliderListener("secondarySat")
+  document.querySelector("#ellipseHeight").oninput = makeSliderListener("ellipseHeight")
   updateGenerator()
 
 onLoad()

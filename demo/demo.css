@@ -10,6 +10,16 @@
     width: 500px;
 }
 
+.code {
+    width: 400px;
+    font-size: 150%;
+}
+
+.code pre {
+    padding: 20px;
+    line-height: 120%;
+}
+
 .box {
     padding: 1em;
 }

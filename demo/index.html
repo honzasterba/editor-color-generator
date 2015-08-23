@@ -9,20 +9,24 @@
         </div>
         <div class="column form">
             <p>
-                Primary hue: <span id="primaryHueVal">0</span>
+                Primary hue:
                 <input type="range" id="primaryHue" name="primaryHue" value="0" min="0" max="100"/>
+                <span id="primaryHueVal">0</span>
             </p>
             <p>
-                Primary sat: <span id="primarySatVal">0</span>
-                <input type="range" id="primarySat" name="primarySat" value="0" min="0" max="100"/>
+                Primary sat:
+                <input type="range" id="primarySat" name="primarySat" value="70" min="0" max="100"/>
+                <span id="primarySatVal">0.7</span>
             </p>
             <p>
-                Secondary sat: <span id="secondarySatVal">0</span>
-                <input type="range" id="secondarySat" name="secondarySat" value="0" min="0" max="100"/>
+                Secondary sat:
+                <input type="range" id="secondarySat" name="secondarySat" value=20" min="0" max="100"/>
+                <span id="secondarySatVal">0.2</span>
             </p>
             <p>
-                Ellipse height: <span id="ellipseHeightVal">0</span>
-                <input type="range" id="ellipseHeight" name="ellipseHeight" value="0" min="0" max="100"/>
+                Ellipse height:
+                <input type="range" id="ellipseHeight" name="ellipseHeight" value="50" min="0" max="100"/>
+                <span id="ellipseHeightVal">0.5</span>
             </p>
 
             <div class="box" id="primary">primary</div>
@@ -37,7 +41,22 @@
             <div class="box" id="accent5">accent5</div>
             <div class="box" id="accent6">accent6</div>
         </div>
+        <div class="column code">
+            <pre class="background foreground">
+<span>basic</span>
+<span class="primary">primary</span>
+<span class="secondary">secondary</span>
+<span class="selection">selection</span>
+<span class="accent1">accent1</span>
+<span class="accent2">accent2</span>
+<span class="accent3">accent3</span>
+<span class="accent4">accent4</span>
+<span class="accent5">accent5</span>
+<span class="accent6">accent6</span>
+            </pre>
+        </div>
 
+        <script language="javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script language="javascript" src="one-color-all-debug.js"></script>
         <script language="javascript" src="csd.js"></script>
         <script language="javascript" src="demo.js"></script>
