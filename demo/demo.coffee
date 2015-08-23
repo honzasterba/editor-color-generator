@@ -2,9 +2,9 @@ g = null
 
 config = {
   primaryHue: 0,
-  primarySat: 0.7,
+  primarySat: 0.5,
   secondarySat: 0.2
-  ellipseHeight: 0.5
+  ellipseHeight: 0.25
 }
 
 shiftPoint = (p) ->
@@ -30,7 +30,6 @@ draw = ->
   $('.code .background').css({backgroundColor: g.base(0)})
   $('.code .foreground').css({color: g.base(1)})
   $('.code .selection').css({backgroundColor: g.base(0.5)})
-
   ctx.strokeStyle = "gray"
   i = 1
   for c in g.accents 6
@@ -73,14 +72,18 @@ drawColorCircle = (ctx, circleColor) ->
   ctx.stroke()
 
 drawColorWheel = (ctx) ->
-  for hue in [0..100]
-    for sat in [0..50]
-      drawColorWheelPoint ctx, hue / 100.0, sat / 50.0
+  for x in [-1..1] by 0.025
+    maxY = Math.sqrt(1 - x*x)
+    for y in [0..maxY] by 0.025
+      drawColorWheelPoint ctx, x, y
+      drawColorWheelPoint ctx, x, -y
+  null
 
-drawColorWheelPoint = (ctx, hue, sat) ->
-  point = shiftPoint(colorToPoint hue, sat)
-  ctx.fillStyle = color("black").hsl().lightness(0.5).hue(hue).saturation(sat).hex()
-  rad = 14
+drawColorWheelPoint = (ctx, x, y) ->
+  hs = pointToColor x, y
+  point = shiftPoint { x:x, y:y }
+  ctx.fillStyle = color("black").hsl().lightness(0.5).hue(hs.hue).saturation(hs.sat).hex()
+  rad = 6
   ctx.fillRect point.x-(rad/2), point.y-(rad/2), rad, rad
 
 drawPivot = (ctx) ->

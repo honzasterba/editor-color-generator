@@ -4,7 +4,14 @@ else
   color = require "onecolor"
 
 pointToColor = (x, y) ->
-  if x >= 0 && y >= 0
+  if x == 0 && y == 0
+    return {hue: 0, sat: 0}
+  else if x == 0
+    return {
+      hue: y > 0 ? 0.25 : 0.75
+      sat: y
+    }
+  else if x >= 0 && y >= 0
     tan = y/x
     delta = Math.atan tan
   else if x <= 0 && y >= 0
