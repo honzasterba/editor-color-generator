@@ -98,13 +98,19 @@ drawPivot = (ctx) ->
 updateGenerator = ->
   g = generator(config.primaryHue, config.primarySat, config.secondarySat, config.ellipseHeight)
   document.querySelector("#primary").style.backgroundColor = g.primary
+  document.querySelector("#primary .value").innerHTML = g.primary
   document.querySelector("#secondary").style.backgroundColor = g.secondary
+  document.querySelector("#secondary .value").innerHTML = g.secondary
   document.querySelector("#base2").style.backgroundColor = g.base(0.2)
+  document.querySelector("#base2 .value").innerHTML = g.base(0.2)
   document.querySelector("#base5").style.backgroundColor = g.base(0.5)
+  document.querySelector("#base5 .value").innerHTML = g.base(0.5)
   document.querySelector("#base7").style.backgroundColor = g.base(0.7)
+  document.querySelector("#base7 .value").innerHTML = g.base(0.7)
   i = 1
   for c in g.accents 6
     document.querySelector("#accent" + i).style.backgroundColor = c
+    document.querySelector("#accent" + i + " .value").innerHTML = c
     i++
   draw()
 
