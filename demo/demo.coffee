@@ -27,8 +27,8 @@ draw = ->
   drawColorCircle ctx, g.secondary
   $('.code .primary').css({color: g.primary})
   $('.code .secondary').css({color: g.secondary})
-  $('.code .background').css({backgroundColor: g.base(0)})
-  $('.code .foreground').css({color: g.base(1)})
+  $('.code .background').css({backgroundColor: g.base(0.2)})
+  $('.code .foreground').css({color: g.base(0.8)})
   $('.code .selection').css({backgroundColor: g.base(0.5)})
   ctx.strokeStyle = "gray"
   i = 1
